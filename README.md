@@ -38,9 +38,9 @@ Make sure you have the following installed:
 3. Open index.html in your web browser to start using the app.
 
 ### Usage
-Home: View the main dashboard with an overview of tasks and documents.
-Tasks: Manage your tasks by adding, editing, and marking them as complete.
-Documents: Upload and manage your documents.
+- Home: View the main dashboard with an overview of tasks and documents.
+- Tasks: Manage your tasks by adding, editing, and marking them as complete.
+- Documents: Upload and manage your documents.
 
 ### Contributing
 Contributions are welcome! Please fork the repository and submit a pull request with your changes.
@@ -49,6 +49,6 @@ Contributions are welcome! Please fork the repository and submit a pull request 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ### Contact
-Email: tjsyte@gmail.com
-LinkedIn: John Syte Tiopes
-GitHub: tjsyte
+- Email: tjsyte@gmail.com
+- LinkedIn: John Syte Tiopes
+- GitHub: tjsyte
