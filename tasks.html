@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tasks Management</title>
+
+  <link rel="icon" type="image/png" href="to-do-list.png">
+
+  <!-- Include Tailwind CSS for styling -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="CSS/app.css" rel="stylesheet">
+
+  <!-- Add Font Awesome for icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+
+<body class="font-sans bg-gray-100">
+
+  <!-- Preloader -->
+  <div id="preloader" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75 z-50">
+    <div class="loader">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+  </div>
+
+  <!-- Burger Menu Button (Visible on mobile) -->
+  <div id="burger-menu" class="lg:hidden p-4 cursor-pointer text-black">
+    <i class="fas fa-bars"></i>
+  </div>
+
+  <!-- Sidebar -->
+  <div id="sidebar"
+    class="fixed top-0 left-0 w-64 h-full bg-blue-900 text-white p-6 lg:block hidden transition-transform duration-300">
+    <!-- Close button (visible only on mobile) -->
+    <button id="close-sidebar" class="lg:hidden absolute top-4 right-4 text-white">
+      <i class="fas fa-times"></i>
+    </button>
+
+    <h2 class="text-lg font-bold mb-6">
+      <img src="to-do-list.png" alt="To-Do Icon" class="inline-block w-6 h-6 mr-2">
+      To-Do
+    </h2>
+
+    <ul class="space-y-4">
+      <li>
+        <a href="index.html" class="flex items-center px-4 py-2 rounded hover:bg-blue-500 transition">
+          <i class="fas fa-home mr-3"></i> Home
+        </a>
+      </li>
+      <li>
+        <a href="tasks.html#tasks" class="flex items-center px-4 py-2 rounded hover:bg-blue-500 transition">
+          <i class="fas fa-list-ul mr-3"></i> Tasks
+        </a>
+      </li>
+      <li>
+        <a href="documents.html#documents" class="flex items-center px-4 py-2 rounded hover:bg-blue-500 transition">
+          <i class="fas fa-file-alt mr-3"></i> Documents
+        </a>
+      </li>
+    </ul>
+    <div class="mt-10">
+      <h3 class="text-sm uppercase font-bold tracking-wide opacity-75">Shortcuts</h3>
+      <ul class="space-y-2 mt-2">
+        <li>
+          <a href="#add-task-btn" id="add-task-btn"
+            class="flex items-center px-4 py-2 rounded hover:bg-blue-500 transition">
+            <i class="fas fa-plus-circle mr-3"></i> Add Task
+          </a>
+        </li>
+        <li>
+          <a href="#task-container" class="flex items-center px-4 py-2 rounded hover:bg-blue-500 transition">
+            <i class="fas fa-tasks mr-3"></i> Pending
+            <span id="pending-task-count" class="ml-2 p-1 text-red-200">0</span>
+          </a>
+        </li>
+        <li>
+          <a href="#completed-tasks" class="flex items-center px-4 py-2 rounded hover:bg-blue-500 transition">
+            <i class="fas fa-check-circle mr-3"></i> Completed
+            <span id="completed-task-count" class="ml-2 p-1 text-green-200">0</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="ml-0 lg:ml-64 p-8">
+
+    <section id="task-management" class="mb-8">
+      <!-- Task and Document Sections -->
+      <section id="home" class="mb-8">
+        <h2 class="text-3xl font-bold mb-4">Manage Tasks</h2>
+        <p class="text-gray-600">This section allows you to manage your tasks. You can add, edit, delete tasks, and
+          move them to the completed list.</p>
+      </section>
+
+      <!-- Add Task Button -->
+      <div class="mt-8">
+        <button id="show-add-task-modal" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-500">
+          <i class="fas fa-plus-circle mr-2"></i> Add Task
+        </button>
+      </div>
+
+      <div class="tasks bg-white p-6 rounded shadow mt-8">
+        <h3 class="font-bold text-xl mb-4">Pending Tasks</h3>
+        <div id="task-container" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4" data-status="Pending">
+          <!-- Pending tasks will be dynamically added here -->
+        </div>
+      </div>
+
+      <div class="completed-tasks bg-white p-6 rounded shadow mt-8">
+        <h3 class="font-bold text-xl mb-4">Completed Tasks</h3>
+        <div id="completed-task-container" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4"
+          data-status="Completed">
+          <!-- Completed tasks will be dynamically added here -->
+        </div>
+      </div>
+
+  </main>
+  </div>
+
+  <!-- Add Task Modal -->
+  <div id="add-task-modal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
+    <div class="bg-white p-6 rounded shadow w-full sm:w-96 md:w-1/3">
+      <h3 class="text-2xl font-bold mb-4">Add New Task</h3>
+      <input type="text" id="task-name-input" class="w-full p-2 mb-4 border rounded" placeholder="Enter task name">
+
+      <!-- Additional Fields -->
+      <input type="text" id="task-person-input" class="w-full p-2 mb-4 border rounded"
+        placeholder="Name of person responsible">
+      <input type="datetime-local" id="task-datetime-input" class="w-full p-2 mb-4 border rounded">
+
+      <div class="flex justify-between">
+        <button id="cancel-add-task" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+        <button id="save-add-task" class="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Task Modal -->
+  <div id="edit-task-modal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
+    <div class="bg-white p-6 rounded shadow w-full sm:w-96 md:w-1/3">
+      <h3 class="text-2xl font-bold mb-4">Edit Task</h3>
+      <input type="text" id="edit-task-name-input" class="w-full p-2 mb-4 border rounded" placeholder="Edit task name">
+
+      <!-- Additional Fields for Person and Date -->
+      <input type="text" id="edit-task-person-input" class="w-full p-2 mb-4 border rounded"
+        placeholder="Edit person responsible">
+      <input type="datetime-local" id="edit-task-datetime-input" class="w-full p-2 mb-4 border rounded">
+
+      <div class="flex justify-between">
+        <button id="cancel-edit-task" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+        <button id="save-edit-task" class="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white p-6 mt-8">
+    <div class="container mx-auto flex flex-wrap justify-between items-center space-y-6 lg:space-y-0">
+      <!-- About Section -->
+      <div class="w-full lg:w-1/3">
+        <h3 class="font-bold text-lg mb-4 text-teal-400">About To-Do</h3>
+        <p class="text-gray-400 text-sm">
+          To-Do is a simple, user-friendly platform that helps you monitor and manage your tasks efficiently.
+          Stay organized and keep track of your progress with ease.
+        </p>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="w-full lg:w-1/3">
+        <h3 class="font-bold text-lg mb-4 text-teal-400">Quick Links</h3>
+        <ul class="space-y-2 text-sm">
+          <li>
+            <a href="index.html" class="text-gray-400 hover:text-white lg:text-left">
+              Home
+            </a>
+          </li>
+          <li>
+            <a href="tasks.html" class="text-gray-400 hover:text-white lg:text-left">
+              Tasks
+            </a>
+          </li>
+          <li>
+            <a href="documents.html" class="text-gray-400 hover:text-white lg:text-left">
+              Documents
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Connect Section -->
+      <div class="w-full lg:w-1/3 lg:text-left">
+        <h3 class="font-bold text-lg mb-4 text-teal-400">Connect with Me</h3>
+        <ul class="space-y-2 text-sm">
+          <li>
+            <a href="mailto:tjsyte@gmail.com" class="text-gray-400 hover:text-white lg:text-left">
+              Email
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/in/john-syte-tiopes-1919802b1/" target="_blank"
+              class="text-gray-400 hover:text-white lg:text-left">
+              LinkedIn
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/tjsyte" target="_blank" class="text-gray-400 hover:text-white lg:text-left">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="text-center mt-8 border-t border-gray-600 pt-4">
+      <p class="text-sm text-gray-500">&copy; 2024 To-Do. All rights reserved.</p>
+      <p class="text-xs text-gray-500">Created by tjsyte</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript for tasks management functionality -->
+  <script src="JavaScript/tasks.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Hide preloader after 3 seconds
+      setTimeout(function () {
+        const preloader = document.getElementById('preloader');
+        preloader.style.display = 'none';
+      }, 2000);
+    });
+  </script>
+
+</body>
+
+</html>

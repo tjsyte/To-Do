@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+
+  <link rel="icon" type="image/png" href="to-do-list.png">
+
+  <!-- Include Tailwind CSS for styling -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="CSS/app.css" rel="stylesheet">
+
+  <!-- Add Font Awesome for icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+
+<body class="font-sans bg-gray-100">
+
+  <!-- Preloader -->
+  <div id="preloader" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75 z-50">
+    <div class="loader">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+  </div>
+
+  <!-- Burger Menu Button (Visible on mobile) -->
+  <div id="burger-menu" class="lg:hidden p-4 cursor-pointer text-black">
+    <i class="fas fa-bars"></i>
+  </div>
+
+  <!-- Sidebar -->
+  <div id="sidebar"
+    class="fixed top-0 left-0 w-64 h-full bg-blue-900 text-white p-6 lg:block hidden transition-transform duration-300">
+    <!-- Close button (visible only on mobile) -->
+    <button id="close-sidebar" class="lg:hidden absolute top-4 right-4 text-white">
+      <i class="fas fa-times"></i>
+    </button>
+
+    <h2 class="text-lg font-bold mb-6">
+      <img src="to-do-list.png" alt="To-Do Icon" class="inline-block w-6 h-6 mr-2">
+      To-Do
+    </h2>
+
+    <ul class="space-y-4">
+      <li>
+        <a href="index.html" class="flex items-center px-4 py-2 rounded hover:bg-blue-500 transition">
+          <i class="fas fa-home mr-3"></i> Home
+        </a>
+      </li>
+      <li>
+        <a href="tasks.html#tasks" class="flex items-center px-4 py-2 rounded hover:bg-blue-500 transition">
+          <i class="fas fa-list-ul mr-3"></i> Tasks
+        </a>
+      </li>
+      <li>
+        <a href="documents.html#documents" class="flex items-center px-4 py-2 rounded hover:bg-blue-500 transition">
+          <i class="fas fa-file-alt mr-3"></i> Documents
+        </a>
+      </li>
+    </ul>
+
+    <!-- Daily Quote or Tip -->
+    <div class="mt-8">
+      <h3 class="font-bold text-lg mb-2">Daily Quote</h3>
+      <p id="daily-quote" class="text-gray-300"></p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="ml-0 lg:ml-64 p-8">
+
+    <!-- Home Section -->
+    <section id="home" class="mb-8">
+      <h2 class="text-3xl font-bold mb-4">Home</h2>
+      <p class="text-gray-600">To-Do is a simple, user-friendly platform that helps you monitor and manage your tasks
+        efficiently.
+        Stay organized and keep track of your progress with ease.</p>
+    </section>
+
+    <!-- Search Bar -->
+    <section id="search-bar" class="mb-8 search-bar-visible">
+      <div class="relative">
+        <input type="text" placeholder="Search tasks..." class="p-2 pl-10 w-full border border-gray-300 rounded"
+          id="search-bar-input">
+        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M9 3a6 6 0 100 12 6 6 0 000-12zm8 6a8 8 0 11-16 0 8 8 0 0116 0zm-3.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 01-1.414 1.414l-4-4z"
+              clip-rule="evenodd" />
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cards Section -->
+    <section id="dashboard-cards" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-8">
+      <div class="bg-white p-6 rounded shadow">
+        <h3 class="font-bold text-xl mb-4">Pending Tasks</h3>
+        <p class="text-gray-600">Track your pending tasks here.</p>
+        <p id="pending-task-count" class="font-bold text-3xl">0</p>
+      </div>
+      <div class="bg-white p-6 rounded shadow">
+        <h3 class="font-bold text-xl mb-4">Completed Tasks</h3>
+        <p class="text-gray-600">Track your completed tasks here.</p>
+        <p id="completed-task-count" class="font-bold text-3xl">0</p>
+      </div>
+      <div class="bg-white p-6 rounded shadow">
+        <h3 class="font-bold text-xl mb-4">Documents</h3>
+        <p class="text-gray-600">Manage your documents here.</p>
+        <p id="document-count" class="font-bold text-3xl">0</p>
+      </div>
+    </section>
+
+    <!-- Tasks Overview -->
+    <section id="tasks-overview" class="mb-8">
+      <h2 class="text-3xl font-bold mb-4">Tasks Overview</h2>
+      <div>
+        <ul class="flex border-b">
+          <li class="-mb-px mr-1">
+            <a href="#" onclick="filterTasks('all')"
+              class="bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-blue-700 font-semibold">All
+              Tasks</a>
+          </li>
+          <li class="mr-1">
+            <a href="#" onclick="filterTasks('pending')"
+              class="bg-white inline-block py-2 px-4 text-blue-500 hover:text-blue-800 font-semibold">Pending Tasks</a>
+          </li>
+          <li class="mr-1">
+            <a href="#" onclick="filterTasks('completed')"
+              class="bg-white inline-block py-2 px-4 text-blue-500 hover:text-blue-800 font-semibold">Completed
+              Tasks</a>
+          </li>
+        </ul>
+        <div id="tasks-content"
+          class="bg-white p-6 rounded shadow grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+          <!-- Default content for 'All Tasks' -->
+          <div class="task-card">
+            <h3 class="font-bold text-xl mb-4">All Tasks</h3>
+            <p class="text-gray-600">View all tasks in one place.</p>
+            <ul id="tasks-list"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white p-6 mt-8">
+    <div class="container mx-auto flex flex-wrap justify-between items-center space-y-6 lg:space-y-0">
+      <!-- About Section -->
+      <div class="w-full lg:w-1/3">
+        <h3 class="font-bold text-lg mb-4 text-teal-400">About To-Do</h3>
+        <p class="text-gray-400 text-sm">
+          To-Do is a simple, user-friendly platform that helps you monitor and manage your tasks efficiently.
+          Stay organized and keep track of your progress with ease.
+        </p>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="w-full lg:w-1/3">
+        <h3 class="font-bold text-lg mb-4 text-teal-400">Quick Links</h3>
+        <ul class="space-y-2 text-sm">
+          <li>
+            <a href="index.html" class="text-gray-400 hover:text-white lg:text-left">
+              Home
+            </a>
+          </li>
+          <li>
+            <a href="tasks.html" class="text-gray-400 hover:text-white lg:text-left">
+              Tasks
+            </a>
+          </li>
+          <li>
+            <a href="documents.html" class="text-gray-400 hover:text-white lg:text-left">
+              Documents
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Connect Section -->
+      <div class="w-full lg:w-1/3 lg:text-left">
+        <h3 class="font-bold text-lg mb-4 text-teal-400">Connect with Me</h3>
+        <ul class="space-y-2 text-sm">
+          <li>
+            <a href="mailto:tjsyte@gmail.com" class="text-gray-400 hover:text-white lg:text-left">
+              Email
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/in/john-syte-tiopes-1919802b1/" target="_blank"
+              class="text-gray-400 hover:text-white lg:text-left">
+              LinkedIn
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/tjsyte" target="_blank" class="text-gray-400 hover:text-white lg:text-left">
+              GitHub
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="text-center mt-8 border-t border-gray-600 pt-4">
+      <p class="text-sm text-gray-500">&copy; 2024 To-Do. All rights reserved.</p>
+      <p class="text-xs text-gray-500">Created by tjsyte</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript for toggle functionality -->
+  <script src="JavaScript/index.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Hide preloader after 3 seconds
+      setTimeout(function () {
+        const preloader = document.getElementById('preloader');
+        preloader.style.display = 'none';
+      }, 2000);
+    });
+  </script>
+
+</body>
+
+</html>

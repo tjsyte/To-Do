@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documents Management</title>
+
+    <link rel="icon" type="image/png" href="to-do-list.png">
+
+    <!-- Include Tailwind CSS for styling -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="CSS/app.css" rel="stylesheet">
+
+    <!-- Add Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+
+<body class="font-sans bg-gray-100">
+
+    <!-- Preloader -->
+    <div id="preloader" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75 z-50">
+        <div class="loader">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <!-- Burger Menu Button (Visible on mobile) -->
+    <div id="burger-menu" class="lg:hidden p-4 cursor-pointer text-black">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <!-- Sidebar -->
+    <div id="sidebar"
+        class="fixed top-0 left-0 w-64 h-full bg-blue-900 text-white p-6 lg:block hidden transition-transform duration-300">
+        <!-- Close button (visible only on mobile) -->
+        <button id="close-sidebar" class="lg:hidden absolute top-4 right-4 text-white">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <h2 class="text-lg font-bold mb-6">
+            <img src="to-do-list.png" alt="To-Do Icon" class="inline-block w-6 h-6 mr-2">
+            To-Do
+        </h2>
+
+        <ul class="space-y-4">
+            <li><a href="index.html" class="flex items-center px-4 py-2 rounded hover:bg-blue-500 transition"><i
+                        class="fas fa-home mr-3"></i> Home</a></li>
+            <li><a href="tasks.html#tasks" class="flex items-center px-4 py-2 rounded hover:bg-blue-500 transition"><i
+                        class="fas fa-list-ul mr-3"></i> Tasks</a></li>
+            <li><a href="#documents" class="flex items-center px-4 py-2 rounded hover:bg-blue-500 transition"><i
+                        class="fas fa-file-alt mr-3"></i> Documents</a></li>
+        </ul>
+
+        <!-- New Features -->
+        <div id="documentStatistics" class="mt-8">
+            <h3 class="text-lg font-bold mb-2">Document Statistics</h3>
+            <p id="totalDocuments" class="text-sm">Total Documents: 0</p>
+            <p id="totalSize" class="text-sm">Total Size: 0 KB</p>
+        </div>
+        <div id="recentDocuments" class="mt-8">
+            <h3 class="text-lg font-bold mb-2">Recent Documents</h3>
+            <ul id="recentDocumentList" class="space-y-2 text-sm">
+                <!-- Recent documents will be listed here -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="ml-0 lg:ml-64 p-8">
+        <section id="home" class="mb-8">
+            <h2 class="text-3xl font-bold mb-4">Manage Documents</h2>
+            <p class="text-gray-600">Upload and manage your documents below.</p>
+        </section>
+
+        <!-- Warning Modal -->
+        <div id="warningModal"
+            class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75 hidden z-50">
+            <div class="bg-white rounded-lg p-6 w-11/12 md:w-1/2 lg:w-1/3 text-center">
+                <h2 class="text-xl font-bold mb-4">File Size Exceeded</h2>
+                <p class="text-gray-600 mb-4">The file you are trying to upload exceeds the allowed size limit (5MB).
+                </p>
+                <button onclick="closeWarningModal()" class="mt-2 p-2 bg-blue-500 text-white rounded">Close</button>
+            </div>
+        </div>
+
+        <!-- Document Upload and List -->
+        <section id="documents" class="mb-8">
+            <div class="mb-4">
+                <input type="text" id="searchBar" class="p-2 border border-gray-300 rounded-lg w-full"
+                    placeholder="Search documents...">
+            </div>
+            <div class="mb-4">
+                <select id="sortOptions" class="p-2 border border-gray-300 rounded-lg w-full">
+                    <option value="name">Sort by Name</option>
+                    <option value="date">Sort by Date</option>
+                    <option value="size">Sort by Size</option>
+                </select>
+            </div>
+            <div id="uploadArea"
+                class="mb-4 p-4 border-2 border-dashed border-gray-300 rounded-lg bg-white text-center">
+                <p class="text-gray-600 mb-2">Drag and drop files here or click to upload</p>
+                <input type="file" id="fileInput" class="hidden" multiple>
+                <button onclick="document.getElementById('fileInput').click()"
+                    class="mt-2 p-2 bg-blue-500 text-white rounded">Browse Files</button>
+            </div>
+            <div id="documentList" class="bg-white shadow rounded-lg overflow-x-auto">
+                <div class="min-w-full">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-gray-200">
+                        <div class="font-bold">Name</div>
+                        <div class="font-bold">Size</div>
+                        <div class="font-bold">Type</div>
+                        <div class="font-bold">Date Modified</div>
+                    </div>
+                    <!-- Uploaded documents will be displayed here -->
+                    <div id="documentItems"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white p-6 mt-8">
+        <div class="container mx-auto flex flex-wrap justify-between items-center space-y-6 lg:space-y-0">
+            <!-- About Section -->
+            <div class="w-full lg:w-1/3">
+                <h3 class="font-bold text-lg mb-4 text-teal-400">About To-Do</h3>
+                <p class="text-gray-400 text-sm">
+                    To-Do is a simple, user-friendly platform that helps you monitor and manage your tasks
+                    efficiently.
+                    Stay organized and keep track of your progress with ease.
+                </p>
+            </div>
+            <!-- Quick Links -->
+            <div class="w-full lg:w-1/3">
+                <h3 class="font-bold text-lg mb-4 text-teal-400">Quick Links</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="index.html" class="text-gray-400 hover:text-white lg:text-left">Home</a></li>
+                    <li><a href="tasks.html" class="text-gray-400 hover:text-white lg:text-left">Tasks</a></li>
+                    <li><a href="#documents" class="text-gray-400 hover:text-white lg:text-left">Documents</a></li>
+                </ul>
+            </div>
+            <!-- Connect Section -->
+            <div class="w-full lg:w-1/3 lg:text-left">
+                <h3 class="font-bold text-lg mb-4 text-teal-400">Connect with Me</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="mailto:tjsyte@gmail.com" class="text-gray-400 hover:text-white lg:text-left">Email</a>
+                    </li>
+                    <li><a href="https://www.linkedin.com/in/john-syte-tiopes-1919802b1/" target="_blank"
+                            class="text-gray-400 hover:text-white lg:text-left">LinkedIn</a></li>
+                    <li><a href="https://github.com/tjsyte" target="_blank"
+                            class="text-gray-400 hover:text-white lg:text-left">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="text-center mt-8 border-t border-gray-600 pt-4">
+            <p class="text-sm text-gray-500">&copy; 2024 To-Do. All rights reserved.</p>
+            <p class="text-xs text-gray-500">Created by tjsyte</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for toggle functionality -->
+    <script src="JavaScript/documents.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Hide preloader after 3 seconds
+            setTimeout(function () {
+                const preloader = document.getElementById('preloader');
+                preloader.style.display = 'none';
+            }, 2000);
+        });
+    </script>
+</body>
+
+</html>
